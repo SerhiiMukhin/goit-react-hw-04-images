@@ -22,12 +22,16 @@ const App = () => {
 
     fetchImages(searchQuery, page)
       .then(response => {
-        console.log(searchQuery)
-        console.log(response.data)
+        console.log(searchQuery);
+        console.log(response.data);
         setResult(prevResult => [...prevResult, ...response.data.hits]);
         setTotal(response.data.total);
-        setShowLoadMoreButton(true);
-        setStatus('resolved');
+        if (response.data.total === 0) {
+          setStatus('rejected');
+        } else {
+          setStatus('resolved');
+          setShowLoadMoreButton(true);
+        }
       })
       .catch(error => {
         setStatus('rejected');
@@ -38,15 +42,10 @@ const App = () => {
   useEffect(() => {
     if (status !== 'resolved') return;
 
-    if (result.length === 0) {
-      setStatus('rejected');
-    }
-
     if (result.length === total) {
       setShowLoadMoreButton(false);
-      // alert("Sorry, there's nothing more to show");
     }
-  }, [status, page, result, total]);
+  }, [status, result, total]);
 
   function loadMore() {
     setPage(page => page + 1);
