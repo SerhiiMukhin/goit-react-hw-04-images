@@ -2,18 +2,28 @@ import css from './Searchbar.module.css';
 import { BiSearch } from 'react-icons/bi';
 import PropTypes from 'prop-types';
 
-const Searchbar = ({ searchQuery, setSearchQuery }) => {
+const Searchbar = ({
+  searchQuery,
+  setSearchQuery,
+  setPage,
+  setShowLoadMoreButton,
+  setResult,
+}) => {
   const onSubmit = event => {
     event.preventDefault();
 
-    const query = event.currentTarget.query.value;
+    const newQuery = event.target.query.value.trim();
 
-    if (query.trim() === '') {
-      alert('Please, enter something in the search field');
+    if (newQuery === '') {
+      alert('Please enter your request');
       return;
     }
 
-    setSearchQuery(query);
+    if (searchQuery !== newQuery && newQuery !== '') {
+      setSearchQuery(newQuery);
+      setPage(1);
+      setResult([]);
+    }
   };
 
   return (
