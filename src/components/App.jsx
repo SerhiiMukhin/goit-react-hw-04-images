@@ -22,6 +22,8 @@ const App = () => {
 
     fetchImages(searchQuery, page)
       .then(response => {
+        console.log(searchQuery)
+        console.log(response.data)
         setResult(prevResult => [...prevResult, ...response.data.hits]);
         setTotal(response.data.total);
         setShowLoadMoreButton(true);
@@ -36,9 +38,13 @@ const App = () => {
   useEffect(() => {
     if (status !== 'resolved') return;
 
+    if (result.length === 0) {
+      setStatus('rejected');
+    }
+
     if (result.length === total) {
       setShowLoadMoreButton(false);
-      alert("Sorry, there's nothing more to show");
+      // alert("Sorry, there's nothing more to show");
     }
   }, [status, page, result, total]);
 
